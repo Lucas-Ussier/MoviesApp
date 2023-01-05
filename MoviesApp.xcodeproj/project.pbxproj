@@ -20,6 +20,7 @@
 		D93169AE28F9AF400067C4D4 /* MoviesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93169AD28F9AF400067C4D4 /* MoviesModel.swift */; };
 		D93169B028F9AF4A0067C4D4 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93169AF28F9AF4A0067C4D4 /* Network.swift */; };
 		D93212F2296749E600EDD62E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93212F1296749E600EDD62E /* HomeViewController.swift */; };
+		D93212F4296752C200EDD62E /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93212F3296752C200EDD62E /* SeriesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		D93169AD28F9AF400067C4D4 /* MoviesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesModel.swift; sourceTree = "<group>"; };
 		D93169AF28F9AF4A0067C4D4 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		D93212F1296749E600EDD62E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		D93212F3296752C200EDD62E /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 		D93212F02967489E00EDD62E /* Series */ = {
 			isa = PBXGroup;
 			children = (
+				D93212F3296752C200EDD62E /* SeriesViewController.swift */,
 			);
 			path = Series;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 				D93169B028F9AF4A0067C4D4 /* Network.swift in Sources */,
 				D93169AA28F9AE580067C4D4 /* MovieDetailsViewModel.swift in Sources */,
 				D93169A628F9AD950067C4D4 /* MovieCollectionCell.swift in Sources */,
+				D93212F4296752C200EDD62E /* SeriesViewController.swift in Sources */,
 				D93169AE28F9AF400067C4D4 /* MoviesModel.swift in Sources */,
 				D931699428F9A8440067C4D4 /* MovieViewController.swift in Sources */,
 				D93169A828F9AE320067C4D4 /* MovieDetailsViewController.swift in Sources */,
