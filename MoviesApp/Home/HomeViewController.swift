@@ -49,6 +49,7 @@ class HomeViewController: UIViewController{
         view.backgroundColor = .systemBackground
         addSubviews()
         setupConstraints()
+        addTargets()
         
     }
     
@@ -57,6 +58,12 @@ class HomeViewController: UIViewController{
         self.view.addSubview(homeLogoImageView)
         self.view.addSubview(movieButton)
         self.view.addSubview(seriesButton)
+    }
+    
+    func addTargets(){
+        
+        self.movieButton.addTarget(self, action: #selector(goToMovieView), for: .touchUpInside)
+        self.seriesButton.addTarget(self, action: #selector(goToSeriesView), for: .touchUpInside)
     }
     
     func setupConstraints(){
@@ -79,5 +86,15 @@ class HomeViewController: UIViewController{
             self.movieButton.trailingAnchor.constraint(equalTo:self.seriesButton.trailingAnchor),
             self.movieButton.leadingAnchor.constraint(equalTo:self.seriesButton.leadingAnchor),
         ])
+    }
+    
+    @objc func goToMovieView(){
+        let movieViewController = MovieViewController()
+        self.navigationController?.pushViewController(movieViewController, animated: true)
+    }
+    
+    @objc func goToSeriesView(){
+        let serieViewController = SeriesViewController()
+        self.navigationController?.pushViewController(serieViewController, animated: true)
     }
 }

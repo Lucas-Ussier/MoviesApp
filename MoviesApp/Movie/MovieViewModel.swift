@@ -12,7 +12,7 @@ class MovieViewModel{
     private let network = Network.shared
     
     var count: Int {
-        return network.dataBase.count
+        return network.dataBaseTopRated.count
     }
     
     func getImage(at indexPath: IndexPath, imageView: UIImageView?, titleLabel: UILabel) {
@@ -31,7 +31,7 @@ class MovieViewModel{
                 }.resume()
             }
         }else{
-            guard let path = network.dataBase[indexPath.row].poster_path else { return }
+            guard let path = network.dataBaseTopRated[indexPath.row].poster_path else { return }
             let string = "\(network.imageURL)\(path)"
             guard let url = URL(string: string) else {return}
             DispatchQueue.main.async {
@@ -52,7 +52,7 @@ class MovieViewModel{
             guard let datePopular = network.dataBasePopular[indexPath.row].release_date else {return "No date avaliable."}
             return datePopular
         } else {
-            guard let date = network.dataBase[indexPath.row].release_date else {return "No date avaliable."}
+            guard let date = network.dataBaseTopRated[indexPath.row].release_date else {return "No date avaliable."}
             
             return date
         }
@@ -64,7 +64,7 @@ class MovieViewModel{
             guard let titlePopular = network.dataBasePopular[indexPath.row].title else {return "No title avaliable."}
             return titlePopular
         } else {
-            guard let title = network.dataBase[indexPath.row].title else {return "No title avaliable."}
+            guard let title = network.dataBaseTopRated[indexPath.row].title else {return "No title avaliable."}
             return title
         }
     }

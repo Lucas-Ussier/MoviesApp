@@ -53,7 +53,7 @@ class MovieDetailsViewModel {
             }
         }else{
             for i in 0...network.dataBase.count-1 {
-                if network.dataBase[i].id == index{
+                if network.dataBaseTopRated[i].id == index{
                     chosenId = i
                     break
                 }
@@ -66,7 +66,7 @@ class MovieDetailsViewModel {
             guard let path = network.dataBasePopular[chosenId].backdrop_path else {return}
             teste = path
         }else{
-            guard let path = network.dataBase[chosenId].backdrop_path else {return}
+            guard let path = network.dataBaseTopRated[chosenId].backdrop_path else {return}
             teste = path
         }
         

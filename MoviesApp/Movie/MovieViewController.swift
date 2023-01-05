@@ -72,10 +72,10 @@ class MovieViewController: UIViewController {
         switch segmentedControl.selectedSegmentIndex {
         case 1:
             titleLabel.text = "Popular Movies"
-            network.getPopularMovie()
+            network.getMovie(category: .Popular)
         default:
             titleLabel.text = "UpComing Movies"
-            network.getUpcomingMovie()
+            network.getMovie(category: .TopRated)
         }
     }
     
@@ -128,7 +128,7 @@ extension MovieViewController: UICollectionViewDataSource, UICollectionViewDeleg
                 }
             }
         }else{
-            Movies.currentMovieId = network.dataBase[indexPath.row].id
+            Movies.currentMovieId = network.dataBaseTopRated[indexPath.row].id
             if let movieId = Movies.currentMovieId{
                 DispatchQueue.main.async {
                     Network.shared.getMovieDetails(id: movieId)
