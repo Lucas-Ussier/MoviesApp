@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeViewModel{
+class MovieViewModel{
     
     private let network = Network.shared
     
