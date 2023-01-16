@@ -191,7 +191,7 @@ class MovieDetailsViewController: UIViewController {
             movieImage.topAnchor.constraint(equalTo: uiView.topAnchor),
             movieImage.leadingAnchor.constraint(equalTo: uiView.leadingAnchor),
             movieImage.trailingAnchor.constraint(equalTo: uiView.trailingAnchor),
-            movieImage.heightAnchor.constraint(equalToConstant: 300),
+            movieImage.heightAnchor.constraint(equalToConstant: 200),
             
             titleMovieLabel.topAnchor.constraint(equalTo: movieImage.bottomAnchor, constant: 10),
             titleMovieLabel.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),

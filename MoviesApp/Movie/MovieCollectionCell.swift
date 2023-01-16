@@ -20,7 +20,7 @@ class MovieCollectionCell: UICollectionViewCell {
         let view = UIView()
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.white.cgColor
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.7)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -62,13 +62,20 @@ class MovieCollectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configureCell(movie: MoviesData){
+        self.dateLabel.text = movie.releaseDate
+        self.nameMovieLabel.text = movie.title
+        self.setImage(from: movie.posterPath, imageView: self.movieImage)
+        
+    }
+    
     func creatingConstraints() {
         
         movieImage.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         movieImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         movieImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5).isActive = true
         movieImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5).isActive = true
-        movieImage.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        movieImage.heightAnchor.constraint(equalToConstant: 200).isActive = true
         movieImage.widthAnchor.constraint(equalToConstant: 150).isActive = true
         
         dateBackView.widthAnchor.constraint(equalToConstant: 85).isActive = true
@@ -82,5 +89,20 @@ class MovieCollectionCell: UICollectionViewCell {
         nameMovieLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5).isActive = true
         nameMovieLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5).isActive = true
         nameMovieLabel.topAnchor.constraint(equalTo: movieImage.bottomAnchor, constant: 10).isActive = true
+    }
+}
+
+extension MovieCollectionCell {
+    
+    func setImage(from url: String?, imageView: UIImageView) {
+        guard let url else {return}
+        guard let imageURL = URL(string: "https://image.tmdb.org/t/p/w500\(url)") else {return}
+        DispatchQueue.global().async {
+            guard let imageData = try? Data(contentsOf: imageURL) else {return}
+            let image = UIImage(data: imageData)
+            DispatchQueue.main.async {
+                imageView.image = image
+            }
+        }
     }
 }

@@ -13,141 +13,57 @@ class MovieViewController: UIViewController {
     
     private let viewModel: MovieViewModel = MovieViewModel()
     
-    let segmentedControl: UISegmentedControl = {
-        let buttons = UISegmentedControl(items: ["UpComing","Popular"])
-        buttons.translatesAutoresizingMaskIntoConstraints = false
-        let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        UISegmentedControl.appearance().setTitleTextAttributes(titleTextAttributes, for: .normal)
-        let titleTextAttributes2 = [NSAttributedString.Key.foregroundColor: UIColor.black]
-        UISegmentedControl.appearance().setTitleTextAttributes(titleTextAttributes2, for: .selected)
-        buttons.layer.borderWidth = 2
-        buttons.layer.borderColor = UIColor.white.cgColor
-        buttons.selectedSegmentTintColor = .white
-        buttons.selectedSegmentIndex = 0
-        return buttons
-    }()
-    
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "UpComing Movies"
-        label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 35)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    lazy var collectionView1: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 130, height: 200)
-        layout.minimumLineSpacing = 50
-        layout.minimumInteritemSpacing = 0
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.dataSource = self
-        collection.delegate = self
-        collection.register(MovieCollectionCell.self, forCellWithReuseIdentifier: "Cell")
-        collection.showsHorizontalScrollIndicator = false
-        collection.backgroundColor = .clear
-        return collection
+    private lazy var tableView: UITableView = {
+        let table = UITableView()
+        table.translatesAutoresizingMaskIntoConstraints = false
+        table.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifier)
+        table.dataSource = self
+        table.delegate = self
+        table.backgroundColor = .systemGray
+        return table
+        
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        MovieTableViewCell().collectionSettings(delegate: self, dataSource: self)
         view.backgroundColor = .systemGray
         self.network.delegate = self
-        network.getUpcomingMovie()
-        
-        view.addSubview(segmentedControl)
-        view.addSubview(titleLabel)
-        view.addSubview(collectionView1)
         addConstraints()
-        
-        segmentedControl.addTarget(nil, action: #selector(segmentedValueChanged), for: .valueChanged)
     }
-    
-    @objc func segmentedValueChanged() {
-        
-        switch segmentedControl.selectedSegmentIndex {
-        case 1:
-            titleLabel.text = "Popular Movies"
-            network.getMovie(category: .Popular)
-        default:
-            titleLabel.text = "UpComing Movies"
-            network.getMovie(category: .TopRated)
-        }
-    }
-    
+
     func addConstraints() {
-        segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        segmentedControl.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        segmentedControl.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        segmentedControl.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        self.view.addSubview(tableView)
         
-        titleLabel.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
-        
-        collectionView1.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-        collectionView1.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        collectionView1.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        collectionView1.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+        ])
     }
 }
 
-extension MovieViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewModel.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? MovieCollectionCell
-        
-        self.viewModel.getImage(at: indexPath, imageView: cell?.movieImage, titleLabel: self.titleLabel)
-        DispatchQueue.main.async {
-            cell?.nameMovieLabel.text = self.viewModel.getTitle(at: indexPath, titleLabel: self.titleLabel)
-            cell?.dateLabel.text = self.viewModel.getDate(at: indexPath, titleLabel: self.titleLabel)
-        }
-        return cell ?? UICollectionViewCell()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if self.titleLabel.text == "Popular Movies"{
-            Movies.currentMovieId = network.dataBasePopular[indexPath.row].id
-            if let movieId = Movies.currentMovieId{
-                DispatchQueue.main.async {
-                    Network.shared.getMovieDetails(id: movieId)
-                    Network.shared.getMovieCast(id: movieId)
-                    let vc = MovieDetailsViewController()
-                    vc.currentTitle = self.titleLabel.text
-                    vc.movieId = movieId
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-            }
-        }else{
-            Movies.currentMovieId = network.dataBaseTopRated[indexPath.row].id
-            if let movieId = Movies.currentMovieId{
-                DispatchQueue.main.async {
-                    Network.shared.getMovieDetails(id: movieId)
-                    Network.shared.getMovieCast(id: movieId)
-                }
-                let vc = MovieDetailsViewController()
-                vc.currentTitle = self.titleLabel.text
-                vc.movieId = movieId
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-        }
-    }
-}
 
-extension MovieViewController: CollectionViewReloadDelegate {
-    
-    func collectionViewReloadData() {
-        self.collectionView1.reloadData()
+
+
+extension MovieViewController: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.viewModel.countCategory
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell
+        cell?.configure(category: self.viewModel.getMoviewCategory(indexPath: indexPath))
+        
+        return cell ?? UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 300
+    }
+    
+    
 }
 
 

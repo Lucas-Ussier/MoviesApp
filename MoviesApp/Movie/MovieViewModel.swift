@@ -10,62 +10,61 @@ import UIKit
 class MovieViewModel{
     
     private let network = Network.shared
+    let movieCategoriesArray = [
+        MovieCategory.Upcoming,
+        MovieCategory.Latest,
+        MovieCategory.NowPlaying,
+        MovieCategory.TopRated,
+        MovieCategory.Popular,
+    ]
     
-    var count: Int {
-        return network.dataBaseTopRated.count
+    var countCategory: Int {
+        return movieCategoriesArray.count
     }
     
-    func getImage(at indexPath: IndexPath, imageView: UIImageView?, titleLabel: UILabel) {
-        
-        if titleLabel.text == "Popular Movies"{
-            guard let path = network.dataBasePopular[indexPath.row].poster_path else { return }
-            let string = "\(network.imageURL)\(path)"
-            guard let url = URL(string: string) else {return}
-            DispatchQueue.main.async {
-                URLSession.shared.dataTask(with: url) { data, _, _ in
-                    if let imageData = data{
-                        DispatchQueue.main.async {
-                            imageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                }.resume()
-            }
-        }else{
-            guard let path = network.dataBaseTopRated[indexPath.row].poster_path else { return }
-            let string = "\(network.imageURL)\(path)"
-            guard let url = URL(string: string) else {return}
-            DispatchQueue.main.async {
-                URLSession.shared.dataTask(with: url) { data, _, _ in
-                    if let imageData = data{
-                        DispatchQueue.main.async {
-                            imageView?.image = UIImage(data: imageData)
-                        }
-                    }
-                }.resume()
-            }
-        }
+    func getMoviewCategory(indexPath: IndexPath) -> MovieCategory{
+        return self.movieCategoriesArray[indexPath.row]
     }
-    
-    func getDate(at indexPath: IndexPath, titleLabel: UILabel) -> String {
-        
-        if titleLabel.text == "Popular Movies" {
-            guard let datePopular = network.dataBasePopular[indexPath.row].release_date else {return "No date avaliable."}
-            return datePopular
-        } else {
-            guard let date = network.dataBaseTopRated[indexPath.row].release_date else {return "No date avaliable."}
-            
-            return date
-        }
-    }
-    
-    func getTitle(at indexPath: IndexPath, titleLabel: UILabel) -> String {
-        
-        if titleLabel.text == "Popular Movies" {
-            guard let titlePopular = network.dataBasePopular[indexPath.row].title else {return "No title avaliable."}
-            return titlePopular
-        } else {
-            guard let title = network.dataBaseTopRated[indexPath.row].title else {return "No title avaliable."}
-            return title
-        }
-    }
+  
+//    func getDate(at indexPath: IndexPath, category: MovieCategory) -> String {
+//        switch category {
+//        case .Popular:
+//            guard let date = network.dataBasePopular[indexPath.row].release_date else {return "No date avaliable."}
+//            return date
+//        case .TopRated:
+//            guard let date = network.dataBaseTopRated[indexPath.row].release_date else {return "No date avaliable."}
+//            return date
+//        case .Upcoming:
+//            guard let date = network.dataBaseUpcoming[indexPath.row].release_date else {return "No date avaliable."}
+//            return date
+//        case .NowPlaying:
+//            guard let date = network.dataBaseNowPlaying[indexPath.row].release_date else {return "No date avaliable."}
+//            return date
+//        case .Latest:
+//            guard let date = network.dataBaseLatest[indexPath.row].release_date else {return "No date avaliable."}
+//            return date
+//        }
+//    }
+//
+//    func getTitle(at indexPath: IndexPath, category: MovieCategory) -> String {
+//
+//        switch category {
+//        case .Popular:
+//            guard let title = self.network.dataBasePopular[indexPath.row].title else {return "Título não encontrado"}
+//            return title
+//        case .TopRated:
+//            guard let title = self.network.dataBaseTopRated[indexPath.row].title else {return "Título não encontrado"}
+//            return title
+//        case .Upcoming:
+//            guard let title = self.network.dataBaseUpcoming[indexPath.row].title else {return "Título não encontrado"}
+//            return title
+//        case .NowPlaying:
+//            guard let title = self.network.dataBaseNowPlaying[indexPath.row].title else {return "Título não encontrado"}
+//            return title
+//        case .Latest:
+//            guard let title = self.network.dataBaseLatest[indexPath.row].title else {return "Título não encontrado"}
+//            return title
+//        }
+//
+//    }
 }

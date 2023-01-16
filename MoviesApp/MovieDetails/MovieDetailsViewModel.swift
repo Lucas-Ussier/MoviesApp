@@ -52,7 +52,7 @@ class MovieDetailsViewModel {
                 }
             }
         }else{
-            for i in 0...network.dataBase.count-1 {
+            for i in 0...network.dataBaseTopRated.count-1 {
                 if network.dataBaseTopRated[i].id == index{
                     chosenId = i
                     break
@@ -63,10 +63,10 @@ class MovieDetailsViewModel {
         guard let title else {return}
         var teste = ""
         if title == "Popular Movies"{
-            guard let path = network.dataBasePopular[chosenId].backdrop_path else {return}
+            guard let path = network.dataBasePopular[chosenId].backdropPath else {return}
             teste = path
         }else{
-            guard let path = network.dataBaseTopRated[chosenId].backdrop_path else {return}
+            guard let path = network.dataBaseTopRated[chosenId].backdropPath else {return}
             teste = path
         }
         

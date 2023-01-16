@@ -24,7 +24,7 @@ protocol DetailsCollectionViewReloadDelegate{
     func collectionViewReloadData()
 }
 
-public class Network {
+public class Network: UIImageView{
     
     static let shared = Network()
     var delegate: CollectionViewReloadDelegate?
@@ -39,34 +39,13 @@ public class Network {
     var dataBaseLatest = [MoviesData]()
     var castDataBase = [Cast]()
     var detailsDataBase = MovieDetails(genres: [Genres(name: "")], overview: "", release_date: "0000", runtime: 0, title: "")
-    
-    func getPopularMovie() {
-        
-        let apiKey = "6960008c62a943211888e16078f6f5b1"
-        
-        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)") {
-            
-            URLSession.shared.dataTask(with: tmdbAPIBaseURL) { data, response, error in
-                if let data = data {
-                    do {
-                        let res = try JSONDecoder().decode(Results.self, from: data)
-                        DispatchQueue.main.async {
-                            self.dataBasePopular = res.results
-                            self.delegate?.collectionViewReloadData()
-                        }
-                    } catch let error {
-                        print(error)
-                    }
-                }
-            }.resume()
-        }
-    }
+
     
     func getMovie(category: MovieCategory) {
         
         let apiKey = "6960008c62a943211888e16078f6f5b1"
         
-        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/movie/\(category.rawValue)?api_key=\(apiKey)") {
+        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/movie/\(category.rawValue)?api_key=\(apiKey)&language=pt-BR") {
             
             URLSession.shared.dataTask(with: tmdbAPIBaseURL) { data, response, error in
                 if let data = data {
@@ -99,35 +78,13 @@ public class Network {
             }.resume()
         }
     }
-    
-    func getUpcomingMovie() {
-        
-        let apiKey = "6960008c62a943211888e16078f6f5b1"
-        
-        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/movie/upcoming?api_key=\(apiKey)") {
-            
-            URLSession.shared.dataTask(with: tmdbAPIBaseURL) { data, response, error in
-                if let data = data {
-                    do {
-                        let res = try JSONDecoder().decode(Results.self, from: data)
-                        DispatchQueue.main.async {
-                            self.dataBase = res.results
-                            self.delegate?.collectionViewReloadData()
-                        }
-                        
-                    } catch let error {
-                        print(error)
-                    }
-                }
-            }.resume()
-        }
-    }
+
     
     func getMovieDetails(id: Int) {
         
         let apiKey = "6960008c62a943211888e16078f6f5b1"
         
-        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/movie/\(id)?api_key=\(apiKey)") {
+        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/movie/\(id)?api_key=\(apiKey)&language=pt-BR") {
             
             URLSession.shared.dataTask(with: tmdbAPIBaseURL) { data, response, error in
                 if let data = data {
@@ -148,7 +105,7 @@ public class Network {
         
         let apiKey = "6960008c62a943211888e16078f6f5b1"
         
-        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/movie/\(id)/credits?api_key=\(apiKey)") {
+        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/movie/\(id)/credits?api_key=\(apiKey)&language=pt-BR") {
             
             URLSession.shared.dataTask(with: tmdbAPIBaseURL) { data, response, error in
                 if let data = data {
