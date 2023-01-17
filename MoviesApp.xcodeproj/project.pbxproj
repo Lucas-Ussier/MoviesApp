@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3014F626297715E900E03452 /* SeriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3014F625297715E900E03452 /* SeriesCollectionViewCell.swift */; };
 		D931699028F9A8440067C4D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D931698F28F9A8440067C4D4 /* AppDelegate.swift */; };
 		D931699228F9A8440067C4D4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D931699128F9A8440067C4D4 /* SceneDelegate.swift */; };
 		D931699428F9A8440067C4D4 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D931699328F9A8440067C4D4 /* MovieViewController.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3014F625297715E900E03452 /* SeriesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		D931698C28F9A8440067C4D4 /* MoviesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoviesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D931698F28F9A8440067C4D4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D931699128F9A8440067C4D4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				D93212F3296752C200EDD62E /* SeriesViewController.swift */,
+				3014F625297715E900E03452 /* SeriesCollectionViewCell.swift */,
 			);
 			path = Series;
 			sourceTree = "<group>";
@@ -218,6 +221,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D93169B028F9AF4A0067C4D4 /* Network.swift in Sources */,
+				3014F626297715E900E03452 /* SeriesCollectionViewCell.swift in Sources */,
 				D93169AA28F9AE580067C4D4 /* MovieDetailsViewModel.swift in Sources */,
 				D93169A628F9AD950067C4D4 /* MovieCollectionCell.swift in Sources */,
 				D93212F4296752C200EDD62E /* SeriesViewController.swift in Sources */,
