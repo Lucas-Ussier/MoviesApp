@@ -191,7 +191,6 @@ class MovieViewController: UIViewController{
             self.scrollView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
             
-            
             self.viewScrollView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
             self.viewScrollView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
             self.viewScrollView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor),
