@@ -10,6 +10,8 @@ import UIKit
 
 class MovieViewController: UIViewController{
     
+    private let movieViewModel: MovieViewModel = MovieViewModel()
+    
     private lazy var viewScrollView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -35,12 +37,17 @@ class MovieViewController: UIViewController{
         return label
     }()
     
+    private lazy var layout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+         layout.scrollDirection = .horizontal
+         layout.minimumLineSpacing = 10
+        layout.itemSize = CGSize(width: 170,
+                                 height: 290)
+         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        return layout
+    }()
+    
     private lazy var popularMoviesColletcion: UICollectionView = {
-       let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 120, height: 190)
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
@@ -61,11 +68,7 @@ class MovieViewController: UIViewController{
     }()
     
     private lazy var topRatedMoviesColletcion: UICollectionView = {
-       let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 120, height: 190)
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+       
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
@@ -86,11 +89,7 @@ class MovieViewController: UIViewController{
     }()
     
     private lazy var upcomingMoviesColletcion: UICollectionView = {
-       let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 120, height: 190)
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+       
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
@@ -100,30 +99,6 @@ class MovieViewController: UIViewController{
         return collection
     }()
     
-    //MARK: - Latest Movies
-    private lazy var latestTitleLabel: UILabel = {
-       let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Últimos Lançamentos"
-        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
-        label.textColor = .white
-        return label
-    }()
-    
-    private lazy var latestMoviesColletcion: UICollectionView = {
-       let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 120, height: 190)
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.showsHorizontalScrollIndicator = false
-        collection.backgroundColor = .systemGray
-        collection.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.identifier)
-        collection.tag = 3
-        return collection
-    }()
     
     //MARK: - Now Playing Movies
     private lazy var nowPlayingTitleLabel: UILabel = {
@@ -136,32 +111,28 @@ class MovieViewController: UIViewController{
     }()
     
     private lazy var nowPlayingMoviesColletcion: UICollectionView = {
-       let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 120, height: 190)
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+      
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
         collection.backgroundColor = .systemGray
         collection.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.identifier)
-        collection.tag = 4
+        collection.tag = 3
         return collection
     }()
     
     //MARK: - View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setDelegateAndDataSources()
+        self.setCollectionConfig()
         self.view.backgroundColor = .systemGray3
         addSubviews()
         setConstraints()
         
     }
     
-    private func setDelegateAndDataSources(){
-       let collectionViews = [popularMoviesColletcion, topRatedMoviesColletcion, upcomingMoviesColletcion, latestMoviesColletcion, nowPlayingMoviesColletcion]
+    private func setCollectionConfig(){
+       let collectionViews = [popularMoviesColletcion, topRatedMoviesColletcion, upcomingMoviesColletcion, nowPlayingMoviesColletcion]
         for collectionView in collectionViews {
             collectionView.delegate = self
             collectionView.dataSource = self
@@ -177,8 +148,6 @@ class MovieViewController: UIViewController{
         self.viewScrollView.addSubview(topRatedMoviesColletcion)
         self.viewScrollView.addSubview(upcomingTitleLabel)
         self.viewScrollView.addSubview(upcomingMoviesColletcion)
-        self.viewScrollView.addSubview(latestTitleLabel)
-        self.viewScrollView.addSubview(latestMoviesColletcion)
         self.viewScrollView.addSubview(nowPlayingTitleLabel)
         self.viewScrollView.addSubview(nowPlayingMoviesColletcion)
     }
@@ -191,6 +160,7 @@ class MovieViewController: UIViewController{
             self.scrollView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.scrollView.widthAnchor.constraint(equalTo: self.view.widthAnchor),
             
+            
             self.viewScrollView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
             self.viewScrollView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
             self.viewScrollView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor),
@@ -202,7 +172,7 @@ class MovieViewController: UIViewController{
             self.popularMoviesColletcion.topAnchor.constraint(equalTo: self.popularTitleLabel.bottomAnchor, constant: 10),
             self.popularMoviesColletcion.leadingAnchor.constraint(equalTo: self.viewScrollView.leadingAnchor, constant: 10),
             self.popularMoviesColletcion.trailingAnchor.constraint(equalTo: self.viewScrollView.trailingAnchor, constant: -10),
-            self.popularMoviesColletcion.heightAnchor.constraint(equalToConstant: 200),
+            self.popularMoviesColletcion.heightAnchor.constraint(equalToConstant: 300),
             
             
             self.topRatedTitleLabel.topAnchor.constraint(equalTo: self.popularMoviesColletcion.bottomAnchor, constant: 10),
@@ -211,7 +181,7 @@ class MovieViewController: UIViewController{
             self.topRatedMoviesColletcion.topAnchor.constraint(equalTo: self.topRatedTitleLabel.bottomAnchor, constant: 10),
             self.topRatedMoviesColletcion.leadingAnchor.constraint(equalTo: self.popularMoviesColletcion.leadingAnchor),
             self.topRatedMoviesColletcion.trailingAnchor.constraint(equalTo: self.popularMoviesColletcion.trailingAnchor),
-            self.topRatedMoviesColletcion.heightAnchor.constraint(equalToConstant: 200),
+            self.topRatedMoviesColletcion.heightAnchor.constraint(equalTo: popularMoviesColletcion.heightAnchor),
             
             
             self.upcomingTitleLabel.topAnchor.constraint(equalTo: self.topRatedMoviesColletcion.bottomAnchor, constant: 10),
@@ -220,25 +190,16 @@ class MovieViewController: UIViewController{
             self.upcomingMoviesColletcion.topAnchor.constraint(equalTo: self.upcomingTitleLabel.bottomAnchor, constant: 10),
             self.upcomingMoviesColletcion.leadingAnchor.constraint(equalTo: self.popularMoviesColletcion.leadingAnchor),
             self.upcomingMoviesColletcion.trailingAnchor.constraint(equalTo: self.popularMoviesColletcion.trailingAnchor),
-            self.upcomingMoviesColletcion.heightAnchor.constraint(equalToConstant: 200),
+            self.upcomingMoviesColletcion.heightAnchor.constraint(equalTo: popularMoviesColletcion.heightAnchor),
             
-           
-            self.latestTitleLabel.topAnchor.constraint(equalTo: self.upcomingMoviesColletcion.bottomAnchor, constant: 10),
-            self.latestTitleLabel.leadingAnchor.constraint(equalTo: self.popularTitleLabel.leadingAnchor),
             
-            self.latestMoviesColletcion.topAnchor.constraint(equalTo: self.latestTitleLabel.bottomAnchor, constant: 10),
-            self.latestMoviesColletcion.leadingAnchor.constraint(equalTo: self.popularMoviesColletcion.leadingAnchor),
-            self.latestMoviesColletcion.trailingAnchor.constraint(equalTo: self.popularMoviesColletcion.trailingAnchor),
-            self.latestMoviesColletcion.heightAnchor.constraint(equalToConstant: 200),
-            
-           
-            self.nowPlayingTitleLabel.topAnchor.constraint(equalTo: self.latestMoviesColletcion.bottomAnchor, constant: 10),
+            self.nowPlayingTitleLabel.topAnchor.constraint(equalTo: self.upcomingMoviesColletcion.bottomAnchor, constant: 10),
             self.nowPlayingTitleLabel.leadingAnchor.constraint(equalTo: self.popularTitleLabel.leadingAnchor),
             
             self.nowPlayingMoviesColletcion.topAnchor.constraint(equalTo: self.nowPlayingTitleLabel.bottomAnchor, constant: 10),
             self.nowPlayingMoviesColletcion.leadingAnchor.constraint(equalTo: self.popularMoviesColletcion.leadingAnchor),
             self.nowPlayingMoviesColletcion.trailingAnchor.constraint(equalTo: self.popularMoviesColletcion.trailingAnchor),
-            self.nowPlayingMoviesColletcion.heightAnchor.constraint(equalToConstant: 200),
+            self.nowPlayingMoviesColletcion.heightAnchor.constraint(equalTo: popularMoviesColletcion.heightAnchor),
             self.nowPlayingMoviesColletcion.bottomAnchor.constraint(equalTo: self.viewScrollView.bottomAnchor),
             
            
@@ -249,7 +210,22 @@ class MovieViewController: UIViewController{
 //MARK: - Collection Extension
 extension MovieViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        switch collectionView.tag {
+        case 0:
+            return self.movieViewModel.count(category: .Popular)
+            
+        case 1:
+            return self.movieViewModel.count(category: .TopRated)
+            
+        case 2:
+            return self.movieViewModel.count(category: .Upcoming)
+            
+        case 3:
+            return self.movieViewModel.count(category: .NowPlaying)
+            
+        default:
+            return 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -258,25 +234,61 @@ extension MovieViewController: UICollectionViewDelegate, UICollectionViewDataSou
         
         switch collectionView.tag {
         case 0:
-            cell?.setupCell(url: "/tlZGDi8anF7Fcs5HGVaTEMnv1hp.jpg", title: "Black Panther")
+            cell?.setupCell(url: self.movieViewModel.getMovieImagePath(category: .Popular, indexPath: indexPath))
             
         case 1:
-            cell?.setupCell(url: "/zQJcENHbZUpLQ8RKYt9wTzcXCwv.jpg", title: "Glass Onion")
+            cell?.setupCell(url: self.movieViewModel.getMovieImagePath(category: .TopRated, indexPath: indexPath))
             
         case 2:
-            cell?.setupCell(url: "/tlZGDi8anF7Fcs5HGVaTEMnv1hp.jpg", title: "Black Panther")
+            cell?.setupCell(url: self.movieViewModel.getMovieImagePath(category: .Upcoming, indexPath: indexPath))
             
         case 3:
-            cell?.setupCell(url: "/zQJcENHbZUpLQ8RKYt9wTzcXCwv.jpg", title: "Glass Onion")
+            cell?.setupCell(url: self.movieViewModel.getMovieImagePath(category: .NowPlaying, indexPath: indexPath))
+        default:
+            break
             
-        case 4:
-            cell?.setupCell(url: "/tlZGDi8anF7Fcs5HGVaTEMnv1hp.jpg", title: "Black Panther")
+        }
+        return cell ?? UICollectionViewCell()
+    }
+}
+
+
+extension MovieViewController: CollectionViewReloadDelegate{
+    func collectionViewReloadData(category: MovieCategory) {
+        switch category {
+        case .Popular:
+            self.popularMoviesColletcion.reloadData()
+        case .TopRated:
+            self.topRatedMoviesColletcion.reloadData()
+        case .Upcoming:
+            self.upcomingMoviesColletcion.reloadData()
+        case .NowPlaying:
+            self.nowPlayingMoviesColletcion.reloadData()
+        }
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var detailsViewController: MovieDetailsViewController?
+        
+        switch collectionView.tag {
+        case 0:
+            detailsViewController = MovieDetailsViewController(movieId: self.movieViewModel.getMovieId(category: .Popular, indexPath: indexPath),category: .Popular)
+            
+        case 1:
+            detailsViewController = MovieDetailsViewController(movieId: self.movieViewModel.getMovieId(category: .TopRated, indexPath: indexPath),category: .TopRated)
+            
+        case 2:
+            detailsViewController = MovieDetailsViewController(movieId: self.movieViewModel.getMovieId(category: .Upcoming, indexPath: indexPath),category: .Upcoming)
+            
+        case 3:
+            detailsViewController = MovieDetailsViewController(movieId: self.movieViewModel.getMovieId(category: .NowPlaying, indexPath: indexPath),category: .NowPlaying)
             
         default:
             break
             
         }
-        
-        return cell ?? UICollectionViewCell()
+        guard let detailsViewController else {return}
+        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }

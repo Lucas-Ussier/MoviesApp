@@ -14,45 +14,26 @@ class MovieCollectionViewCell: UICollectionViewCell{
     private lazy var moviePosterImageView: UIImageView = {
        let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentMode = .scaleAspectFill
-        view.backgroundColor = .systemPurple
+        view.contentMode = .scaleToFill
         return view
-    }()
-    
-    private lazy var movieTitleLabel: UILabel = {
-       let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Filme"
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = .white
-        return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        self.backgroundColor = .clear
+        self.backgroundColor = .red
         self.addSubview(moviePosterImageView)
-        self.addSubview(movieTitleLabel)
         self.setupConstraints()
     }
     
-    func setupCell(url: String, title: String){
+    func setupCell(url: String){
         self.setImage(from: url, imageView: self.moviePosterImageView)
-        self.movieTitleLabel.text = title
     }
     
     private func setupConstraints(){
         NSLayoutConstraint.activate([
             moviePosterImageView.topAnchor.constraint(equalTo: self.topAnchor),
-            moviePosterImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            moviePosterImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            moviePosterImageView.bottomAnchor.constraint(equalTo: self.movieTitleLabel.topAnchor, constant: -10),
-            
-            movieTitleLabel.leadingAnchor.constraint(equalTo: moviePosterImageView.leadingAnchor),
-            movieTitleLabel.trailingAnchor.constraint(equalTo: moviePosterImageView.trailingAnchor),
-            movieTitleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            moviePosterImageView.widthAnchor.constraint(equalTo: self.widthAnchor),
+            moviePosterImageView.heightAnchor.constraint(equalTo: self.heightAnchor),
         ])
     }
     

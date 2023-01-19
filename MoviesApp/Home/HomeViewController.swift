@@ -12,7 +12,6 @@ class HomeViewController: UIViewController{
     
     let movieCategoriesArray = [
         MovieCategory.Upcoming,
-        MovieCategory.Latest,
         MovieCategory.NowPlaying,
         MovieCategory.TopRated,
         MovieCategory.Popular,
@@ -106,8 +105,6 @@ class HomeViewController: UIViewController{
     @objc func goToMovieView(){
         let movieViewController = MovieViewController()
         self.navigationController?.pushViewController(movieViewController, animated: true)
-        
-        print(Network.shared.dataBasePopular)
     }
     
     @objc func goToSeriesView(){

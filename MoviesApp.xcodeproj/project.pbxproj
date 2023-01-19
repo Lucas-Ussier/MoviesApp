@@ -20,6 +20,7 @@
 		D93212F4296752C200EDD62E /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93212F3296752C200EDD62E /* SeriesViewController.swift */; };
 		D9E8946529770F36008A44B7 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E8946429770F36008A44B7 /* MovieViewController.swift */; };
 		D9E894682977159D008A44B7 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E894672977159D008A44B7 /* MovieCollectionViewCell.swift */; };
+		D9E8946A2979B090008A44B7 /* MovieViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E894692979B090008A44B7 /* MovieViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		D93212F3296752C200EDD62E /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 		D9E8946429770F36008A44B7 /* MovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewController.swift; sourceTree = "<group>"; };
 		D9E894672977159D008A44B7 /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
+		D9E894692979B090008A44B7 /* MovieViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			children = (
 				D9E8946429770F36008A44B7 /* MovieViewController.swift */,
 				D9E894672977159D008A44B7 /* MovieCollectionViewCell.swift */,
+				D9E894692979B090008A44B7 /* MovieViewModel.swift */,
 			);
 			path = Movie;
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 				D9E894682977159D008A44B7 /* MovieCollectionViewCell.swift in Sources */,
 				D931699028F9A8440067C4D4 /* AppDelegate.swift in Sources */,
 				D931699228F9A8440067C4D4 /* SceneDelegate.swift in Sources */,
+				D9E8946A2979B090008A44B7 /* MovieViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

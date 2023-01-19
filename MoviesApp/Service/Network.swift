@@ -13,11 +13,10 @@ enum MovieCategory: String{
     case TopRated = "top_rated"
     case Upcoming = "upcoming"
     case NowPlaying = "now_playing"
-    case Latest = "latest"
 }
 
 protocol CollectionViewReloadDelegate{
-    func collectionViewReloadData()
+    func collectionViewReloadData(category: MovieCategory)
 }
 
 protocol DetailsCollectionViewReloadDelegate{
@@ -36,7 +35,6 @@ public class Network: UIImageView{
     var dataBaseTopRated = [MoviesData]()
     var dataBaseUpcoming = [MoviesData]()
     var dataBaseNowPlaying = [MoviesData]()
-    var dataBaseLatest = [MoviesData]()
     var castDataBase = [Cast]()
     var detailsDataBase = MovieDetails(genres: [Genres(name: "")], overview: "", release_date: "0000", runtime: 0, title: "")
 
@@ -55,19 +53,16 @@ public class Network: UIImageView{
                             switch category {
                             case .Popular:
                                 self.dataBasePopular = res.results
-                                self.delegate?.collectionViewReloadData()
+                                self.delegate?.collectionViewReloadData(category: .Popular)
                             case .TopRated:
                                 self.dataBaseTopRated = res.results
-                                self.delegate?.collectionViewReloadData()
+                                self.delegate?.collectionViewReloadData(category: .TopRated)
                             case .Upcoming:
                                 self.dataBaseUpcoming = res.results
-                                self.delegate?.collectionViewReloadData()
+                                self.delegate?.collectionViewReloadData(category: .Upcoming)
                             case .NowPlaying:
                                 self.dataBaseNowPlaying = res.results
-                                self.delegate?.collectionViewReloadData()
-                            case .Latest:
-                                self.dataBaseLatest = res.results
-                                self.delegate?.collectionViewReloadData()
+                                self.delegate?.collectionViewReloadData(category: .NowPlaying)
                             }
                             
                         }
