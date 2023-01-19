@@ -10,8 +10,21 @@ import UIKit
 class MovieDetailsViewController: UIViewController {
     
     private let movieDetailsViewModel: MovieDetailsViewModel = MovieDetailsViewModel()
-    var movieId: Int?
-    var currentTitle: String?
+    private var movieId: Int?
+    private var category: MovieCategory?
+
+    init(movieId: Int, category: MovieCategory?) {
+        super.init(nibName: nil, bundle: nil)
+        self.movieId = movieId
+        self.category = category
+        self.movieDetailsViewModel.network.getMovieDetails(id: movieId)
+        self.movieDetailsViewModel.network.getMovieCast(id: movieId)
+ 
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - Image
     lazy var movieImage: UIImageView = {
@@ -37,7 +50,7 @@ class MovieDetailsViewController: UIViewController {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.numberOfLines = 1
-        lb.font = UIFont.boldSystemFont(ofSize: 20)
+        lb.font = UIFont.boldSystemFont(ofSize: 19)
         lb.textColor = .white.withAlphaComponent(0.8)
         lb.textAlignment = .left
         return lb
@@ -163,7 +176,8 @@ class MovieDetailsViewController: UIViewController {
     private func uiElementsSetup() {
         
         guard let movieId else { return }
-        self.movieDetailsViewModel.getImage(at: movieId, imageView: self.movieImage, title: self.currentTitle)
+        guard let category else { return }
+        self.movieDetailsViewModel.getImage(at: movieId, imageView: self.movieImage, category: category)
         DispatchQueue.main.async {
             let movieInfo = self.movieDetailsViewModel.getMovieDetails()
             self.yearMovieLabel.text = movieInfo.release_date
@@ -191,7 +205,7 @@ class MovieDetailsViewController: UIViewController {
             movieImage.topAnchor.constraint(equalTo: uiView.topAnchor),
             movieImage.leadingAnchor.constraint(equalTo: uiView.leadingAnchor),
             movieImage.trailingAnchor.constraint(equalTo: uiView.trailingAnchor),
-            movieImage.heightAnchor.constraint(equalToConstant: 300),
+            movieImage.heightAnchor.constraint(equalToConstant: 200),
             
             titleMovieLabel.topAnchor.constraint(equalTo: movieImage.bottomAnchor, constant: 10),
             titleMovieLabel.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
