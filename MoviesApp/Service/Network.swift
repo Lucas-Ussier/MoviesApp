@@ -8,11 +8,22 @@
 
 import UIKit
 
+enum SeriesCategory: String{
+    case Popular = "popular"
+    case TopRated = "top_rated"
+    case TVAiringToday = "airing_today"
+    case TVOnTheAir = "on_the_air"
+}
+
 enum MovieCategory: String{
     case Popular = "popular"
     case TopRated = "top_rated"
     case Upcoming = "upcoming"
     case NowPlaying = "now_playing"
+}
+
+protocol SeriesCollectionViewReloadDelegate{
+    func collectionViewReloadData(category: SeriesCategory)
 }
 
 protocol CollectionViewReloadDelegate{
@@ -28,6 +39,7 @@ public class Network: UIImageView{
     static let shared = Network()
     var delegate: CollectionViewReloadDelegate?
     var detailsDelegate: DetailsCollectionViewReloadDelegate?
+    var seriesDelegate: SeriesCollectionViewReloadDelegate?
     
     let imageURL: String = "https://image.tmdb.org/t/p/original"
     var dataBase = [MoviesData]()
@@ -37,7 +49,11 @@ public class Network: UIImageView{
     var dataBaseNowPlaying = [MoviesData]()
     var castDataBase = [Cast]()
     var detailsDataBase = MovieDetails(genres: [Genres(name: "")], overview: "", release_date: "0000", runtime: 0, title: "")
-
+    
+    var dataBaseSeriesPopular = [SeriesData]()
+    var dataBaseSeriesTopRated = [SeriesData]()
+    var dataBaseTVAiringToday = [SeriesData]()
+    var dataBaseTVOnTheAir = [SeriesData]()
     
     func getMovie(category: MovieCategory) {
         
@@ -63,6 +79,41 @@ public class Network: UIImageView{
                             case .NowPlaying:
                                 self.dataBaseNowPlaying = res.results
                                 self.delegate?.collectionViewReloadData(category: .NowPlaying)
+                            }
+                            
+                        }
+                    } catch let error {
+                        print(error)
+                    }
+                }
+            }.resume()
+        }
+    }
+    
+    func getSeries(category: SeriesCategory) {
+        
+        let apiKey = "6960008c62a943211888e16078f6f5b1"
+        
+        if let tmdbAPIBaseURL = URL(string: "https://api.themoviedb.org/3/tv/\(category.rawValue)?api_key=\(apiKey)&language=pt-BR") {
+            
+            URLSession.shared.dataTask(with: tmdbAPIBaseURL) { data, response, error in
+                if let data = data {
+                    do {
+                        let res = try JSONDecoder().decode(Serie.self, from: data)
+                        DispatchQueue.main.async {
+                            switch category {
+                            case .Popular:
+                                self.dataBaseSeriesPopular = res.results
+                                self.seriesDelegate?.collectionViewReloadData(category: .Popular)
+                            case .TopRated:
+                                self.dataBaseSeriesTopRated = res.results
+                                self.seriesDelegate?.collectionViewReloadData(category: .TopRated)
+                            case .TVAiringToday:
+                                self.dataBaseTVAiringToday = res.results
+                                self.seriesDelegate?.collectionViewReloadData(category: .TVAiringToday)
+                            case .TVOnTheAir:
+                                self.dataBaseTVOnTheAir = res.results
+                                self.seriesDelegate?.collectionViewReloadData(category: .TVOnTheAir)
                             }
                             
                         }

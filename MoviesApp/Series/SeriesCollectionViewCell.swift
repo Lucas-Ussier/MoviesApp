@@ -14,21 +14,8 @@ class SeriesCollectionViewCell: UICollectionViewCell {
     lazy var serieImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleToFill
         return image
-    }()
-    
-    //MARK: - Label
-    lazy var nameSerieLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.adjustsFontSizeToFitWidth = true
-        lb.numberOfLines = 0
-        lb.font = UIFont.systemFont(ofSize: 12)
-        lb.textColor = .white
-        lb.textAlignment = .center
-        lb.text = "Nome da Serie"
-        return lb
     }()
     
     //MARK: - Init
@@ -36,7 +23,6 @@ class SeriesCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.backgroundColor = .secondaryLabel
         contentView.addSubview(serieImage)
-        contentView.addSubview(nameSerieLabel)
         configConstraints()
     }
     
@@ -45,18 +31,31 @@ class SeriesCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setupCell(url: String){
+        self.setImage(from: url, imageView: self.serieImage)
+    }
+    
     //MARK: - Constraints
     private func configConstraints() {
         
         NSLayoutConstraint.activate([
-            serieImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-            serieImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            serieImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            serieImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            
-            nameSerieLabel.topAnchor.constraint(equalTo: serieImage.bottomAnchor, constant: 10),
-            nameSerieLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            nameSerieLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5)
+            serieImage.topAnchor.constraint(equalTo: self.topAnchor),
+            serieImage.widthAnchor.constraint(equalTo: self.widthAnchor),
+            serieImage.heightAnchor.constraint(equalTo: self.heightAnchor),
         ])
+    }
+}
+
+extension SeriesCollectionViewCell {
+    
+    func setImage(from url: String, imageView: UIImageView) {
+        guard let imageURL = URL(string: "https://image.tmdb.org/t/p/w500\(url)") else {return}
+        DispatchQueue.global().async {
+            guard let imageData = try? Data(contentsOf: imageURL) else {return}
+            let image = UIImage(data: imageData)
+            DispatchQueue.main.async {
+                imageView.image = image
+            }
+        }
     }
 }

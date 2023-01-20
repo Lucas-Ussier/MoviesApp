@@ -17,6 +17,13 @@ class HomeViewController: UIViewController{
         MovieCategory.Popular,
     ]
     
+    let seriesCategoriesArray = [
+        SeriesCategory.Popular,
+        SeriesCategory.TopRated,
+        SeriesCategory.TVAiringToday,
+        SeriesCategory.TVOnTheAir,
+    ]
+    
     private lazy var appNameLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +71,9 @@ class HomeViewController: UIViewController{
         for category in movieCategoriesArray {
             Network.shared.getMovie(category: category)
         }
-        
+        for category in seriesCategoriesArray {
+            Network.shared.getSeries(category: category)
+        }
     }
     
     func addSubviews(){

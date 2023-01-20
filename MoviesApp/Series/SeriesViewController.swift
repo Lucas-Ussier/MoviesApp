@@ -10,6 +10,10 @@ import UIKit
 
 class SeriesViewController: UIViewController{
     
+    private let network = Network.shared
+    private var delegate: SeriesCollectionViewReloadDelegate?
+    private let seriesViewModel: SeriesViewModel = SeriesViewModel()
+    
     //MARK: - Labels
     lazy var popularLabel: UILabel = {
         let lb = UILabel()
@@ -19,7 +23,7 @@ class SeriesViewController: UIViewController{
         lb.font = UIFont.boldSystemFont(ofSize: 25)
         lb.textColor = .white
         lb.textAlignment = .left
-        lb.text = "Series Populares"
+        lb.text = "Populares"
         return lb
     }()
     
@@ -31,11 +35,11 @@ class SeriesViewController: UIViewController{
         lb.font = UIFont.boldSystemFont(ofSize: 25)
         lb.textColor = .white
         lb.textAlignment = .left
-        lb.text = "Favoritos"
+        lb.text = "Favoritas"
         return lb
     }()
     
-    lazy var upcomingLabel: UILabel = {
+    lazy var tvAiringTodayLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.numberOfLines = 0
@@ -43,11 +47,11 @@ class SeriesViewController: UIViewController{
         lb.font = UIFont.boldSystemFont(ofSize: 25)
         lb.textColor = .white
         lb.textAlignment = .left
-        lb.text = "Em Breve"
+        lb.text = "Hoje Na TV"
         return lb
     }()
     
-    lazy var nowPlayingLabel: UILabel = {
+    lazy var tvOnTheAirLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.numberOfLines = 0
@@ -55,19 +59,7 @@ class SeriesViewController: UIViewController{
         lb.font = UIFont.boldSystemFont(ofSize: 25)
         lb.textColor = .white
         lb.textAlignment = .left
-        lb.text = "Em Cartaz"
-        return lb
-    }()
-    
-    lazy var latestLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.numberOfLines = 0
-        lb.lineBreakMode = .byWordWrapping
-        lb.font = UIFont.boldSystemFont(ofSize: 25)
-        lb.textColor = .white
-        lb.textAlignment = .left
-        lb.text = "Últimos Lançamentos"
+        lb.text = "No Ar"
         return lb
     }()
     
@@ -75,13 +67,13 @@ class SeriesViewController: UIViewController{
     lazy var popularCollectionView: UICollectionView = {
         let layoutCollection = UICollectionViewFlowLayout()
         layoutCollection.scrollDirection = .horizontal
-        layoutCollection.itemSize = CGSize(width: 120, height: 190)
+        layoutCollection.itemSize = CGSize(width: 170, height: 290)
         layoutCollection.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         layoutCollection.minimumLineSpacing = 10
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection )
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
-        collection.backgroundColor = .clear
+        collection.backgroundColor = .systemGray
         collection.dataSource = self
         collection.delegate = self
         collection.register(SeriesCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
@@ -92,13 +84,13 @@ class SeriesViewController: UIViewController{
     lazy var topRatedCollectionView: UICollectionView = {
         let layoutCollection = UICollectionViewFlowLayout()
         layoutCollection.scrollDirection = .horizontal
-        layoutCollection.itemSize = CGSize(width: 120, height: 190)
+        layoutCollection.itemSize = CGSize(width: 170, height: 290)
         layoutCollection.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         layoutCollection.minimumLineSpacing = 10
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection )
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
-        collection.backgroundColor = .clear
+        collection.backgroundColor = .systemGray
         collection.dataSource = self
         collection.delegate = self
         collection.register(SeriesCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
@@ -106,16 +98,16 @@ class SeriesViewController: UIViewController{
         return collection
     }()
     
-    lazy var upcomingCollectionView: UICollectionView = {
+    lazy var tvAiringTodayCollectionView: UICollectionView = {
         let layoutCollection = UICollectionViewFlowLayout()
         layoutCollection.scrollDirection = .horizontal
-        layoutCollection.itemSize = CGSize(width: 120, height: 190)
+        layoutCollection.itemSize = CGSize(width: 170, height: 290)
         layoutCollection.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         layoutCollection.minimumLineSpacing = 10
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection )
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
-        collection.backgroundColor = .clear
+        collection.backgroundColor = .systemGray
         collection.dataSource = self
         collection.delegate = self
         collection.register(SeriesCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
@@ -123,37 +115,20 @@ class SeriesViewController: UIViewController{
         return collection
     }()
     
-    lazy var nowPlayingCollectionView: UICollectionView = {
+    lazy var tvOnTheAirCollectionView: UICollectionView = {
         let layoutCollection = UICollectionViewFlowLayout()
         layoutCollection.scrollDirection = .horizontal
-        layoutCollection.itemSize = CGSize(width: 120, height: 190)
+        layoutCollection.itemSize = CGSize(width: 170, height: 290)
         layoutCollection.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         layoutCollection.minimumLineSpacing = 10
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection )
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.showsHorizontalScrollIndicator = false
-        collection.backgroundColor = .clear
+        collection.backgroundColor = .systemGray
         collection.dataSource = self
         collection.delegate = self
         collection.register(SeriesCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collection.tag = 3
-        return collection
-    }()
-    
-    lazy var latestCollectionView: UICollectionView = {
-        let layoutCollection = UICollectionViewFlowLayout()
-        layoutCollection.scrollDirection = .horizontal
-        layoutCollection.itemSize = CGSize(width: 120, height: 190)
-        layoutCollection.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        layoutCollection.minimumLineSpacing = 10
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: layoutCollection )
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.showsHorizontalScrollIndicator = false
-        collection.backgroundColor = .clear
-        collection.dataSource = self
-        collection.delegate = self
-        collection.register(SeriesCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        collection.tag = 4
         return collection
     }()
     
@@ -166,14 +141,12 @@ class SeriesViewController: UIViewController{
         scroll.addSubview(uiView)
         scroll.addSubview(popularLabel)
         scroll.addSubview(topRatedLabel)
-        scroll.addSubview(upcomingLabel)
-        scroll.addSubview(nowPlayingLabel)
-        scroll.addSubview(latestLabel)
+        scroll.addSubview(tvAiringTodayLabel)
+        scroll.addSubview(tvOnTheAirLabel)
         scroll.addSubview(popularCollectionView)
         scroll.addSubview(topRatedCollectionView)
-        scroll.addSubview(upcomingCollectionView)
-        scroll.addSubview(nowPlayingCollectionView)
-        scroll.addSubview(latestCollectionView)
+        scroll.addSubview(tvAiringTodayCollectionView)
+        scroll.addSubview(tvOnTheAirCollectionView)
         return scroll
     }()
     
@@ -187,7 +160,7 @@ class SeriesViewController: UIViewController{
     //MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        self.delegate = self
     }
     
     //MARK: - viewDidAppear
@@ -195,7 +168,7 @@ class SeriesViewController: UIViewController{
         super.viewDidAppear(animated)
         view.addSubview(scrollView)
         configConstraints()
-        view.backgroundColor = .systemGray
+        view.backgroundColor = .systemGray3
     }
     
     //MARK: - Constraints
@@ -218,7 +191,7 @@ class SeriesViewController: UIViewController{
             popularCollectionView.topAnchor.constraint(equalTo: popularLabel.bottomAnchor),
             popularCollectionView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
             popularCollectionView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -10),
-            popularCollectionView.heightAnchor.constraint(equalToConstant: 250),
+            popularCollectionView.heightAnchor.constraint(equalToConstant: 300),
             
             topRatedLabel.topAnchor.constraint(equalTo: popularCollectionView.bottomAnchor, constant: 10),
             topRatedLabel.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
@@ -226,32 +199,24 @@ class SeriesViewController: UIViewController{
             topRatedCollectionView.topAnchor.constraint(equalTo: topRatedLabel.bottomAnchor),
             topRatedCollectionView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
             topRatedCollectionView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -10),
-            topRatedCollectionView.heightAnchor.constraint(equalToConstant: 250),
+            topRatedCollectionView.heightAnchor.constraint(equalToConstant: 300),
             
-            upcomingLabel.topAnchor.constraint(equalTo: topRatedCollectionView.bottomAnchor, constant: 10),
-            upcomingLabel.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
+            tvAiringTodayLabel.topAnchor.constraint(equalTo: topRatedCollectionView.bottomAnchor, constant: 10),
+            tvAiringTodayLabel.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
 
-            upcomingCollectionView.topAnchor.constraint(equalTo: upcomingLabel.bottomAnchor),
-            upcomingCollectionView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
-            upcomingCollectionView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -10),
-            upcomingCollectionView.heightAnchor.constraint(equalToConstant: 250),
+            tvAiringTodayCollectionView.topAnchor.constraint(equalTo: tvAiringTodayLabel.bottomAnchor),
+            tvAiringTodayCollectionView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
+            tvAiringTodayCollectionView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -10),
+            tvAiringTodayCollectionView.heightAnchor.constraint(equalToConstant: 300),
 
-            nowPlayingLabel.topAnchor.constraint(equalTo: upcomingCollectionView.bottomAnchor, constant: 10),
-            nowPlayingLabel.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
-
-            nowPlayingCollectionView.topAnchor.constraint(equalTo: nowPlayingLabel.bottomAnchor),
-            nowPlayingCollectionView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
-            nowPlayingCollectionView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -10),
-            nowPlayingCollectionView.heightAnchor.constraint(equalToConstant: 250),
-
-            latestLabel.topAnchor.constraint(equalTo: nowPlayingCollectionView.bottomAnchor, constant: 10),
-            latestLabel.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
-
-            latestCollectionView.topAnchor.constraint(equalTo: latestLabel.bottomAnchor),
-            latestCollectionView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
-            latestCollectionView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -10),
-            latestCollectionView.heightAnchor.constraint(equalToConstant: 250),
-            latestCollectionView.bottomAnchor.constraint(equalTo: uiView.bottomAnchor),
+            tvOnTheAirLabel.topAnchor.constraint(equalTo: tvAiringTodayCollectionView.bottomAnchor, constant: 10),
+            tvOnTheAirLabel.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
+            
+            tvOnTheAirCollectionView.topAnchor.constraint(equalTo: tvOnTheAirLabel.bottomAnchor),
+            tvOnTheAirCollectionView.leadingAnchor.constraint(equalTo: uiView.leadingAnchor, constant: 10),
+            tvOnTheAirCollectionView.trailingAnchor.constraint(equalTo: uiView.trailingAnchor, constant: -10),
+            tvOnTheAirCollectionView.heightAnchor.constraint(equalToConstant: 300),
+            tvOnTheAirCollectionView.bottomAnchor.constraint(equalTo: uiView.bottomAnchor),
         ])
     }
 }
@@ -260,14 +225,59 @@ class SeriesViewController: UIViewController{
 extension SeriesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return 10
+        switch collectionView.tag {
+        case 0:
+            return self.seriesViewModel.count(category: .Popular)
+            
+        case 1:
+            return self.seriesViewModel.count(category: .TopRated)
+            
+        case 2:
+            return self.seriesViewModel.count(category: .TVAiringToday)
+            
+        case 3:
+            return self.seriesViewModel.count(category: .TVOnTheAir)
+            
+        default:
+            return 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? SeriesCollectionViewCell
         
+        switch collectionView.tag {
+        case 0:
+            cell?.setupCell(url: self.seriesViewModel.getSerieImagePath(category: .Popular, indexPath: indexPath))
+            
+        case 1:
+            cell?.setupCell(url: self.seriesViewModel.getSerieImagePath(category: .TopRated, indexPath: indexPath))
+            
+        case 2:
+            cell?.setupCell(url: self.seriesViewModel.getSerieImagePath(category: .TVAiringToday, indexPath: indexPath))
+            
+        case 3:
+            cell?.setupCell(url: self.seriesViewModel.getSerieImagePath(category: .TVOnTheAir, indexPath: indexPath))
+        default:
+            break
+        }
         return cell ?? UICollectionViewCell()
     }
+}
+
+//MARK: - Extension SeriesCollectionViewReloadDelegate
+extension SeriesViewController: SeriesCollectionViewReloadDelegate {
+    func collectionViewReloadData(category: SeriesCategory) {
+        switch category {
+        case .Popular:
+            self.popularCollectionView.reloadData()
+        case .TopRated:
+            self.topRatedCollectionView.reloadData()
+        case .TVAiringToday:
+            self.tvAiringTodayCollectionView.reloadData()
+        case .TVOnTheAir:
+            self.tvOnTheAirCollectionView.reloadData()
+        }
+    } 
 }
