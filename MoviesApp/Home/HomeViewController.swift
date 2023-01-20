@@ -10,6 +10,13 @@ import UIKit
 
 class HomeViewController: UIViewController{
     
+    let movieCategoriesArray = [
+        MovieCategory.Upcoming,
+        MovieCategory.NowPlaying,
+        MovieCategory.TopRated,
+        MovieCategory.Popular,
+    ]
+    
     private lazy var appNameLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -50,6 +57,13 @@ class HomeViewController: UIViewController{
         addSubviews()
         setupConstraints()
         addTargets()
+        feedDataBases()
+    }
+    
+    func feedDataBases(){
+        for category in movieCategoriesArray {
+            Network.shared.getMovie(category: category)
+        }
         
     }
     
@@ -75,7 +89,7 @@ class HomeViewController: UIViewController{
         
             self.homeLogoImageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.homeLogoImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            self.homeLogoImageView.heightAnchor.constraint(equalToConstant: 300),
+            self.homeLogoImageView.heightAnchor.constraint(equalToConstant: 200),
             self.homeLogoImageView.widthAnchor.constraint(equalTo: homeLogoImageView.heightAnchor),
             
             self.seriesButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -70),

@@ -41,18 +41,21 @@ class MovieDetailsViewModel {
         return Cast(character: character, name: name)
     }
     
-    func getImage(at index: Int, imageView: UIImageView?, title: String?) {
+    func getImage(at index: Int, imageView: UIImageView?, category: MovieCategory) {
         
         var chosenId = 0
-        if title == "Popular Movies"{
+        
+        if category == .Popular{
             for i in 0...network.dataBasePopular.count-1 {
                 if network.dataBasePopular[i].id == index{
                     chosenId = i
                     break
                 }
             }
-        }else{
-            for i in 0...network.dataBase.count-1 {
+        }
+            
+        if category == .TopRated{
+            for i in 0...network.dataBaseTopRated.count-1 {
                 if network.dataBaseTopRated[i].id == index{
                     chosenId = i
                     break
@@ -60,13 +63,44 @@ class MovieDetailsViewModel {
             }
         }
         
-        guard let title else {return}
+        if category == .Upcoming{
+            for i in 0...network.dataBaseUpcoming.count-1 {
+                if network.dataBaseUpcoming[i].id == index{
+                    chosenId = i
+                    break
+                }
+            }
+        }
+              
+        if category == .NowPlaying{
+            for i in 0...network.dataBaseNowPlaying.count-1 {
+                if network.dataBaseNowPlaying[i].id == index{
+                    chosenId = i
+                    break
+                }
+            }
+        }
+        
+        
         var teste = ""
-        if title == "Popular Movies"{
-            guard let path = network.dataBasePopular[chosenId].backdrop_path else {return}
+        
+        if category == .Popular{
+            guard let path = network.dataBasePopular[chosenId].backdropPath else {return}
             teste = path
-        }else{
-            guard let path = network.dataBaseTopRated[chosenId].backdrop_path else {return}
+        }
+            
+        if category == .TopRated{
+            guard let path = network.dataBaseTopRated[chosenId].backdropPath else {return}
+            teste = path
+        }
+        
+        if category == .Upcoming{
+            guard let path = network.dataBaseUpcoming[chosenId].backdropPath else {return}
+            teste = path
+        }
+              
+        if category == .NowPlaying{
+            guard let path = network.dataBaseNowPlaying[chosenId].backdropPath else {return}
             teste = path
         }
         
