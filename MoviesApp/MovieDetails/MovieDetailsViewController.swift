@@ -267,6 +267,15 @@ extension MovieDetailsViewController: UICollectionViewDelegate, UICollectionView
         }
         return cell ?? UICollectionViewCell()
     }
+    
+     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)  {
+        let cast: Cast = self.movieDetailsViewModel.getCast(at: indexPath.row)
+        guard let castName = cast.name else {return}
+         let searchName = castName.replacingOccurrences(of: " ", with: "+")
+         print(searchName)
+         guard let url = URL(string: "https://www.google.com/search?q=\(searchName)") else {return}
+         UIApplication.shared.open(url)
+    }
 }
 
 extension MovieDetailsViewController: DetailsCollectionViewReloadDelegate {
